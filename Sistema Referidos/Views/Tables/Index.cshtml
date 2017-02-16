@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Sistema_Referidos.Models.Table>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.TableState)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TableNro)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TableCustomerDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TablePoints)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableState)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableNro)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableCustomerDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TablePoints)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.idTable }) |
+            @Html.ActionLink("Details", "Details", new { id=item.idTable }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.idTable })
+        </td>
+    </tr>
+}
+
+</table>

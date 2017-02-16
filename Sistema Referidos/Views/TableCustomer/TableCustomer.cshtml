@@ -1,0 +1,287 @@
+﻿@using Newtonsoft.Json
+
+
+@{
+    ViewBag.Title = "TableCustomer";
+}
+
+<h2 class="text-center">Mesas</h2>
+
+<div class="container" style="max-width:640px;">
+    <div class="master">
+        <h4>Detalles de Mesa</h4>
+        <table id="mytable" class="table table-bordered">
+            <tr>
+                <td>
+                    Nro. Mesa 
+                </td>
+                <td>
+                    <input type="text" id="TableNro" placeholder="Nro. Mesa" class="inputForm" /> 
+                    <span class="error"> TableNro no requerid </span>
+                </td>   
+
+                <td>
+                    Fecha Mesa    
+                </td>
+                <td>
+                    <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" id="TableCustomerDate" placeholder="Fecha Mesa" class="inputForm"/>
+                    <span class="error"> Valid TableCustomerDate requerid </span>
+
+                </td>
+            </tr>
+            <tr>
+            <td>Descripción</td>
+                <td colspan="3"> 
+                    <textarea id="description" style="width:100%"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="details">
+        <h4>Agregar Cliente a Mesa</h4>
+        <table style="width:100%;" class="table table-bordered ">
+
+            <tr>
+                <td>Cliente</td>
+                <td>Recomendado por</td>
+                <td>Fecha</td>
+                <td>&nbsp;</td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    <input type="text" id="NameCustomer" class="inputForm"/>
+                    <span class="error">Item required</span>
+                </td>
+                <td>
+                    <input type="text" id="NameRecomender" class="inputForm"/>
+                    <span class="error">Name Recomender valid required</span>
+                </td>
+                <td>
+                    <input type="date" id="DateAtTable" class="inputForm"  />
+                    <span class="error">rate valid required</span>
+
+                </td>
+
+                <td>
+                    <input type="button" value="Agregar" id="add" class="btn btn-primary"/>
+                </td>
+            </tr>
+
+        </table>
+
+        <div id="CustomerAtTable" class="tablecontainer">
+
+        </div>
+
+        <div class="text-center">
+            <input id="submit" type="button" value="Guardar" class="StyleButtonSubmit btn btn-success btn-lg " />
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+<script>
+    //DatePicker
+
+
+
+    $(document).ready(function () {
+
+        var orderItems = [];
+
+        //add button click function
+
+        $('#add').click(function () {
+
+
+            //Check validation of order item
+            var isValidItem = true;
+            if ($('#NameCustomer').val().trim() == '') {
+                isValidItem = false;
+                $('#NameCustomer').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#NameCustomer').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if (!($('#NameRecomender').val().trim() != '')) {
+                isValidItem = false;
+                $('#NameRecomender').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#NameRecomender').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if (!($('#DateAtTable').val().trim() != '' )) {
+                isValidItem = false;
+                $('#DateAtTable').siblings('span.error').css('visibility', 'visible');
+            }
+            else {
+                $('#DateAtTable').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            //Add item to list if valid
+            if (isValidItem) {
+                orderItems.push({
+                        NameCustomer: $('#NameCustomer').val().trim(),
+                        NameRecomender: $('#NameRecomender').val().trim(),
+                        DateAtTable: $('#DateAtTable').val().trim()
+
+
+
+                });
+
+                //Clear fields
+                $('#NameCustomer').val('').focus();
+                $('#NameRecomender').val('').focus();
+                $('#DateAtTable').val('');
+
+            }
+            //populate order items
+            GeneratedItemsTable();
+
+        });
+
+        //save button
+
+        $('#submit').click(function () {
+            //validation of order
+            var isAllValid = true;
+            if (orderItems.length == 0) {
+                $('#orderItems').html('<span style="color:red;">Please add order items</span>');
+                isAllValid = false;
+            }
+
+            if ($('#TableNro').val().trim() == '') {
+                $('#TableNro').siblings('span.error').css('visibility', 'visible');
+                isAllValid = false;
+            }
+            else {
+                $('#TableNro').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            if ($('#TableCustomerDate').val().trim() == '') {
+                $('#TableCustomerDate').siblings('span.error').css('visibility', 'visible');
+                isAllValid = false;
+            }
+            else {
+                $('#TableCustomerDate').siblings('span.error').css('visibility', 'hidden');
+            }
+
+            //Save if valid
+            if (isAllValid) {
+
+                var data = {
+                    TableNro: $('#TableNro').val().trim(),
+                    TableCustomerDate: $('#TableCustomerDate').val().trim(),
+                    //Sorry forgot to add Description Field
+                    Description: $('#description').val().trim(),
+                    CustomerAtTables: orderItems
+
+
+
+                }
+                console.log(orderItems);
+                $(this).val('Please wait...');
+
+                $.ajax({
+
+                    url: '@Url.Action("SaveOrder", "TableCustomer")', 
+                    type: "POST",
+                    data: JSON.stringify(data),
+                    dataType: "JSON",
+                    contentType: "application/json",
+                        success: function(d) { 
+                            //check is successfully save to database
+                            if (d.status == true) {
+                                var url = '@Url.Action("Index", "Home")';
+                                window.location.href = url;
+                            } else {
+                                alert('Failed');
+                            }
+                            $('#submit').val('Save');
+                        },
+                        error: function() {
+                            alert('Error. Please try again.');
+                            $('#submit').val('Save');
+                        }
+                    });
+                }
+
+            });
+
+
+        //function for show add items Customer Table
+
+    //    function GeneratedItemsTable() {
+
+
+    //        if (orderItems.length > 0) {
+
+    //            var $table = $('<table/>');
+    //            $table.append('<thead><tr><th>Name</th><th>NameRecomender</th><th>DateAtTable</th></tr></thead>');
+    //            var $tbody = $('<tbody/>');
+
+    //            $('#orderItems').html('<span style="color:red;"></span>');
+
+    //            $.each(orderItems, function (i, val) {
+    //                var $row = $('<tr/>');
+    //                $row.append($('<td/>').html(val.NameCustomer));
+    //                $row.append($('<td/>').html(val.NameRecomender));
+    //                $row.append($('<td/>').html(val.DateAtTable));
+    //                $tbody.append($row);
+
+
+    //            $table.append($row);
+    //            });
+    //            console.log("current", orderItems);
+    //            $table.append($tbody);
+    //            $('#orderItems').html($table);
+
+
+
+
+    //            }
+    //         }
+
+
+        //});
+
+        function GeneratedItemsTable() {
+            $('.elim').remove();
+
+            if (orderItems.length > 0) {
+                $('#orderItems').html('<span style="color:red;"></span>');
+
+                $.each(orderItems, function (i, val) {
+                    var $row = $('<tr class="elim"  style="background-color: white"></tr>');
+                    $row.append($('<td></td>').html(val.NameCustomer));
+                    $row.append($('<td></td>').html(val.NameRecomender));
+                    $row.append($('<td></td>').html(val.DateAtTable));
+
+                    var $remove = $('<a href="#">Eliminar</a>');
+
+
+                    $row.append($('<td></td>').append($remove));
+                    $('#mytable > tbody:last').append($row);
+
+                });
+
+            } else {
+                $('#orderItems').html('');
+
+            }
+        }
+    });
+
+
+
+
+</script>
+
+    }
