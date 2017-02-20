@@ -9,33 +9,20 @@ namespace Sistema_Referidos.Models
     public class Table
     {
         [Key]
-        public int idTable { get; set; }
+        public int IdTable { get; set; }
 
         public TableState TableState { get; set; }
-
-        public string TableNro { get; set; }
-
        
-        public string Description { get; set; }
+        public string TableDescription { get; set; }
 
         [Display(Name = "Fecha de Creación")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:/dd/mm/yyyy}", ApplyFormatInEditMode = false)]
-        public DateTime TableCustomerDate { get; set; }
+        [DisplayFormat(DataFormatString = "{0:/yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        public DateTime TableDate { get; set; }
 
         public int TablePoints { get; set; }
 
-        //public string Pos1 { get; set; }
-
-        //public string Pos2 { get; set; }
-
-        //public string Pos3 { get; set; }
-        //public string Pos4 { get; set; }
-        //public string Pos5 { get; set; }  
-        //public string Pos6 { get; set; }
-        //public string Pos7 { get; set; }
-
-        public virtual ICollection<CustomerAtTable> CustomerAtTables { get; set; }
+        public virtual ICollection<TablePosition> TablePositions { get; set; }
 
 
 

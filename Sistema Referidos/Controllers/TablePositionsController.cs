@@ -11,107 +11,116 @@ using Sistema_Referidos.Models;
 
 namespace Sistema_Referidos.Controllers
 {
-    public class TablesController : Controller
+    public class TablePositionsController : Controller
     {
         private ReferidosContext db = new ReferidosContext();
 
-        // GET: Tables
+        // GET: TablePositions
         public ActionResult Index()
         {
-            return View(db.Tables.ToList());
+            var tablePositions = db.TablePositions.Include(t => t.Customer).Include(t => t.Table);
+            return View(tablePositions.ToList());
         }
 
-        // GET: Tables/Details/5
+        // GET: TablePositions/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Tables.Find(id);
-            if (table == null)
+            TablePosition tablePosition = db.TablePositions.Find(id);
+            if (tablePosition == null)
             {
                 return HttpNotFound();
             }
-            return View(table);
+            return View(tablePosition);
         }
 
-        // GET: Tables/Create
+        // GET: TablePositions/Create
         public ActionResult Create()
         {
+            ViewBag.IdCustomer = new SelectList(db.Customers, "IdCustomer", "CustomerName");
+            ViewBag.IdTable = new SelectList(db.Tables, "IdTable", "TableDescription");
             return View();
         }
 
-        // POST: Tables/Create
+        // POST: TablePositions/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "IdTable,TableState,TableDescription,TableDate,TablePoints")] Table table)
+        public ActionResult Create([Bind(Include = "IdTablePosition,IdCustomer,IdTable")] TablePosition tablePosition)
         {
             if (ModelState.IsValid)
             {
-                db.Tables.Add(table);
+                db.TablePositions.Add(tablePosition);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(table);
+            ViewBag.IdCustomer = new SelectList(db.Customers, "IdCustomer", "CustomerName", tablePosition.IdCustomer);
+            ViewBag.IdTable = new SelectList(db.Tables, "IdTable", "TableDescription", tablePosition.IdTable);
+            return View(tablePosition);
         }
 
-        // GET: Tables/Edit/5
+        // GET: TablePositions/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Tables.Find(id);
-            if (table == null)
+            TablePosition tablePosition = db.TablePositions.Find(id);
+            if (tablePosition == null)
             {
                 return HttpNotFound();
             }
-            return View(table);
+            ViewBag.IdCustomer = new SelectList(db.Customers, "IdCustomer", "CustomerName", tablePosition.IdCustomer);
+            ViewBag.IdTable = new SelectList(db.Tables, "IdTable", "TableDescription", tablePosition.IdTable);
+            return View(tablePosition);
         }
 
-        // POST: Tables/Edit/5
+        // POST: TablePositions/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "IdTable,TableState,TableDescription,TableDate,TablePoints")] Table table)
+        public ActionResult Edit([Bind(Include = "IdTablePosition,IdCustomer,IdTable")] TablePosition tablePosition)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(table).State = EntityState.Modified;
+                db.Entry(tablePosition).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(table);
+            ViewBag.IdCustomer = new SelectList(db.Customers, "IdCustomer", "CustomerName", tablePosition.IdCustomer);
+            ViewBag.IdTable = new SelectList(db.Tables, "IdTable", "TableDescription", tablePosition.IdTable);
+            return View(tablePosition);
         }
 
-        // GET: Tables/Delete/5
+        // GET: TablePositions/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Table table = db.Tables.Find(id);
-            if (table == null)
+            TablePosition tablePosition = db.TablePositions.Find(id);
+            if (tablePosition == null)
             {
                 return HttpNotFound();
             }
-            return View(table);
+            return View(tablePosition);
         }
 
-        // POST: Tables/Delete/5
+        // POST: TablePositions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Table table = db.Tables.Find(id);
-            db.Tables.Remove(table);
+            TablePosition tablePosition = db.TablePositions.Find(id);
+            db.TablePositions.Remove(tablePosition);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

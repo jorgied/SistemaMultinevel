@@ -14,17 +14,10 @@ namespace Sistema_Referidos.Context
         {
         }
 
-
-        public System.Data.Entity.DbSet<Sistema_Referidos.Models.Product> Products { get; set; }
+        public System.Data.Entity.DbSet<Sistema_Referidos.Models.Table> Tables { get; set; }
 
         public System.Data.Entity.DbSet<Sistema_Referidos.Models.Customer> Customers { get; set; }
 
-       
-        public System.Data.Entity.DbSet<Sistema_Referidos.Models.Table> Tables { get; set; }
-
-
-        public System.Data.Entity.DbSet<Sistema_Referidos.Models.CustomerAtTable> CustomerAtTables { get; set; }
-
-
+        public System.Data.Entity.DbSet<Sistema_Referidos.Models.TablePosition> TablePositions { get; set; }
     }
 }

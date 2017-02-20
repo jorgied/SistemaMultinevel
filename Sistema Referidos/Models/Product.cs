@@ -20,7 +20,6 @@ namespace Sistema_Referidos.Models
         public decimal? Cost { get; set; }
 
         public string Image { get; set; }
-
         
         public int IdCustomer { get; set; } //claveForanea
     }

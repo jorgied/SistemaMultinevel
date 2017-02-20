@@ -25,7 +25,7 @@ namespace Sistema_Referidos.Models
 
         public string CustomerEmail { get; set; }
 
-        public string Referido { get; set; }
+        public virtual ICollection<TablePosition> TablePositions { get; set; }
 
 
 
