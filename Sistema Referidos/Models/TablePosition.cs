@@ -18,5 +18,7 @@ namespace Sistema_Referidos.Models
         public int IdTable { get; set; } //Clave Foránea Table
 
         public virtual Table Table { get; set; }
+
+        public virtual ICollection<TablePosition> Referred { get; set; }
     }
 }
