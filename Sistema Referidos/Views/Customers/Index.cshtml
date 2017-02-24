@@ -4,12 +4,14 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2 class="text-center">Lista de Clientes</h2>
+<hr/>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table" id="tabla">
+    <thead>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.CustomerName)
@@ -23,29 +25,41 @@
         <th>
             @Html.DisplayNameFor(model => model.CustomerEmail)
         </th>
-        <th></th>
+        <th>Opciones</th>
     </tr>
+    </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerAddress)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerPhone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CustomerEmail)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdCustomer }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdCustomer }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdCustomer })
-        </td>
-    </tr>
-}
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerPhone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustomerEmail)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = item.IdCustomer}) |
+                @Html.ActionLink("Details", "Details", new {id = item.IdCustomer}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.IdCustomer})
+            </td>
+        </tr>
+    }
+    </tbody>
 
 </table>
+    
+
+@section scripts
+{
+    <script>
+        $('#tabla').DataTable();
+    </script>
+}

@@ -4,12 +4,13 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
-
+<h2 class="text-center">Lista de Mesas</h2>
+<hr/>
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
+<table class="table" id="tabla">
+    <thead>
     <tr>
         <th>
             @Html.DisplayNameFor(model => model.TableState)
@@ -23,29 +24,40 @@
         <th>
             @Html.DisplayNameFor(model => model.TablePoints)
         </th>
-        <th></th>
+        <th>Opciones</th>
     </tr>
+    </thead>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.TableState)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TableDescription)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TableDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TablePoints)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.IdTable }) |
-            @Html.ActionLink("Details", "Details", new { id=item.IdTable }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.IdTable })
-        </td>
-    </tr>
-}
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableDescription)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TablePoints)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {id = item.IdTable}) |
+                @Html.ActionLink("Details", "Details", new {id = item.IdTable}) |
+                @Html.ActionLink("Delete", "Delete", new {id = item.IdTable})
+            </td>
+        </tr>
+    }
+    </tbody>
 
 </table>
+    
+@section scripts
+{
+    <script>
+        $('#tabla').DataTable();
+    </script>
+}
